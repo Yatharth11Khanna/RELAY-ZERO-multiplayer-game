@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: game
+    description: Multiplayer game server operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /game/status:
+    get:
+      operationId: getGameStatus
+      tags: [game]
+      summary: Get multiplayer server status
+      description: Returns current room and player counts for the game server
+      responses:
+        "200":
+          description: Game server status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameStatus"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +48,20 @@ components:
           type: string
       required:
         - status
+    GameStatus:
+      type: object
+      properties:
+        status:
+          type: string
+        activeRooms:
+          type: integer
+        connectedPlayers:
+          type: integer
+        maxPlayersPerRoom:
+          type: integer
+      required:
+        - status
+        - activeRooms
+        - connectedPlayers
+        - maxPlayersPerRoom
 

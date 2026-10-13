@@ -1,0 +1,63 @@
+Build **RELAY ZERO**, a real-time multiplayer browser game, from the specification below.
+
+You are a senior full-stack game developer. Prioritize a working, reliable multiplayer game over visual extras. Start by briefly outlining the architecture and implementation plan, then implement the game. Do not stop after giving me a plan.
+
+## Game concept
+
+RELAY ZERO is a cooperative signal-decoding game for 2–6 players. Players join a room from separate devices, receive different private clues about a hidden four-symbol sequence, communicate their findings, and submit the correct sequence before time runs out.
+
+## Required gameplay
+
+1. A player can create a room and receive a short room code.
+2. Other players can join using that code and choose a display name.
+3. The host can start a round when at least two players are connected.
+4. The server generates a hidden sequence of four distinct symbols selected from a set of six symbols.
+5. Every player receives private clues. Distribute clue information so that the combined clues uniquely determine the correct sequence. Generate clues from the actual answer, validate them, and never expose another player's private clues to unauthorized clients.
+6. Give the team 75 seconds and three submission attempts.
+7. Players can discuss their clues through an in-game room chat. Provide a simple, clearly labeled sequence-entry interface.
+8. Validate submissions on the server. Correct submissions win the round; incorrect submissions consume one attempt. The team loses if time or attempts run out.
+9. Show the result, the correct sequence, the team's score, and a rematch option.
+10. Support multiple consecutive rounds without requiring players to recreate the room.
+
+## Multiplayer requirements
+
+- Use React, TypeScript and Vite for the frontend.
+- Use Node.js, TypeScript and Socket.IO for the real-time server.
+- The server is authoritative for rooms, player membership, clues, timers, submissions, scoring and round results.
+- Synchronize public state across all clients.
+- Send each player their own private clues separately. Never broadcast the secret answer or another player's private clues before the round ends.
+- Handle player disconnects and reconnects gracefully where feasible.
+- Validate room codes, player actions, submissions and message lengths on the server.
+- Prevent duplicate submissions, invalid actions, stale actions and multiple timers from corrupting the game.
+- Support 2–6 players. Ensure the clue generator works at both the minimum and maximum player counts.
+
+## Design direction
+
+Create a polished, responsive, mobile-first interface with a dark navy background, cyan and amber signal accents, crisp typography, distinctive geometric symbols and subtle animations.
+
+Include these screens:
+- Landing page and create/join room controls
+- Room lobby with player list and ready/start state
+- Active game with private clue cards, timer, attempts remaining, sequence entry and chat
+- Victory/defeat results and rematch
+
+Keep the rules visible and understandable without a human explaining them. Do not add accounts, payments, AI APIs, voice chat or unnecessary external services.
+
+## Implementation order
+
+1. Build room creation, room joining and synchronized lobby state.
+2. Implement the server-side puzzle generator and private clue delivery.
+3. Implement the timed round, sequence submission, scoring and end states.
+4. Add chat, reconnect handling and rematches.
+5. Polish the interface after the core game works.
+
+## Quality requirements
+
+- Use clear TypeScript types and maintainable code.
+- Add automated tests for puzzle generation, unique solvability, valid/invalid submissions, scoring and round transitions.
+- Ensure a complete round can be played by two separate browser sessions.
+- Provide clear run instructions and the local URL.
+- Run the available tests and production build, fix errors, and report anything that remains unverified.
+- Do not claim that multiplayer or deployment works unless it has actually been tested.
+
+Begin implementing the working MVP now.

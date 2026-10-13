@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "RELAY ZERO"
+description = "A real-time cooperative signal-decoding game for 2–6 players. Create or join a room, share private clues in chat, solve a four-symbol sequence before time expires, and play consecutive rounds together."
+version = "1.0.0"
+id = "artifacts/relay-zero"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24519
+
+[services.development]
+run = "pnpm --filter @workspace/relay-zero run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/relay-zero", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/relay-zero/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24519"
+BASE_PATH = "/"

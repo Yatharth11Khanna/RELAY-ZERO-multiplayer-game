@@ -1,44 +1,50 @@
-# [Project name]
+# RELAY ZERO
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+RELAY ZERO is a cooperative, real-time browser puzzle where 2–6 players share private clues to decode a four-symbol signal.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- Open the `artifacts/relay-zero: web` preview to play.
+- The `artifacts/api-server: API Server` workflow provides the Socket.IO game server and status endpoints required by the web app.
+- `pnpm --filter @workspace/api-server run test` — run puzzle and multiplayer server tests.
+- `pnpm --filter @workspace/api-server run typecheck` — typecheck the server.
+- `pnpm --filter @workspace/relay-zero run typecheck` — typecheck the client.
+- `PORT=5173 BASE_PATH=/relay-zero pnpm --filter @workspace/relay-zero run build` — create the production client bundle.
+- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and schemas from the OpenAPI spec.
+- Replit’s managed artifact workflows provide `PORT` and `BASE_PATH`; no database or external service setup is required.
 
 ## Stack
 
-- pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- pnpm workspaces, Node.js, TypeScript
+- Client: React, Vite, Socket.IO client
+- Server: Express, Socket.IO, TypeScript
+- API status contract and generated React Query hooks: OpenAPI + Orval
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/relay-zero/src` — player-facing game UI and Socket.IO client.
+- `artifacts/api-server/src/game` — authoritative game state, puzzle generation, scoring, and tests.
+- `lib/api-spec/openapi.yaml` — REST API contract used to generate the status hooks.
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The server owns answers, deadlines, attempts, room membership, and scores; clients only receive public state plus their own private clues.
+- Game rooms live in server memory and are not persisted to a database.
+- Reconnect credentials are kept in the player’s browser so they can rejoin a live room during its reconnect window.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Create or join a room with a four-character code; the host starts once at least two players are connected.
+- Collaborate through private clues and room chat to submit a four-symbol sequence within 75 seconds and three attempts.
+- View server-scored results and start another round with the room.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+No additional user preferences recorded.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+Room state is in memory: restarting the API server ends active rooms. Use the managed artifact workflows so the web client and `/api` routes are served through the same preview.
 
 ## Pointers
 
